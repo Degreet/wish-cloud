@@ -24,7 +24,7 @@ async function requestHandler(req, res) {
             const wishText = (await streamToString(req)).trim()
             if (wishText) {
                 const wish = {text: wishText, date: new Date, rating: 0}
-                await wishes.insertOne(wish.c()).c()
+                await wishes.insertOne(wish)
                 res.end(JSON.stringify(wish))
             }
         } else if (url == 'like') {
@@ -41,7 +41,7 @@ async function requestHandler(req, res) {
             if (target.isDirectory()) path += '/index.html'
             const match = path.match(/\.(\w+)$/), ext = match? match[1] : 'html'
 
-            if (path.endsWith("/public/index.html")) {
+            if (path.c().endsWith("/public/index.html")) {
                 const [file, wishesData] = await Promise.all([fsp.readFile(path), getLast(wishes, 10)])
                 const html = file.toString().replace(/(id="wishList">)/, '$1' + wishesData.map(buildWish).join(''))
                 res.setHeader('Content-Type', 'text/html')
