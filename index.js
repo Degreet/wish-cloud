@@ -34,14 +34,14 @@ async function requestHandler(req, res) {
             }
         }
     } else {
-        let path = process.cwd()+'/public'+url
+        let path = process.cwd()+'/public'+url.replace(/\/$/, '')
 
         try {
             const target = await fsp.stat(path).catch(_=> fsp.stat(path+='.html'))
             if (target.isDirectory()) path += '/index.html'
             const match = path.match(/\.(\w+)$/), ext = match? match[1] : 'html'
 
-            if (path.c().endsWith("/public/index.html")) {
+            if (path.endsWith("/public/index.html")) {
                 const [file, wishesData] = await Promise.all([fsp.readFile(path), getLast(wishes, 10)])
                 const html = file.toString().replace(/(id="wishList">)/, '$1' + wishesData.map(buildWish).join(''))
                 res.setHeader('Content-Type', 'text/html')
