@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wish Cloud</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <h1 class="title">Облако желаний</h1>
+    <button id="addWishBtn" class="btn-green">Загадать желание</button>
+
+    <ul class="wishes" id="wishList"></ul>
+
+    <div class="my-modal" id="addWishModal">
+        <h3 class="title">Загадать желание</h3><br>
+        <textarea id="wishArea" placeholder="Я хочу..."></textarea>
+        <div class="buttons">
+            <button id="sendWishBtn" class="btn-blue">Загадать</button>
+            <button class="btn-blue">Отмена</button>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

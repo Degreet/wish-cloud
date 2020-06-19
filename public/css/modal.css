@@ -1,0 +1,26 @@
+.glass {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #0009;
+    display: flex;
+}
+
+.modal {
+    background: #ffffff;
+    width: 400px;
+    margin: auto;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 111;
+}
+
+.modal div {
+    float: right;
+}
+
+.hidden {
+    display: none;
+}
