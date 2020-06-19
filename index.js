@@ -27,6 +27,11 @@ async function requestHandler(req, res) {
                 await wishes.insertOne(wish.c()).c()
                 res.end(JSON.stringify(wish))
             }
+        } else if (url == 'like') {
+            const wishId = await streamToString(req)
+            if (wishId) {
+                wishes.updateOne({_id: ObjectId(wishId)}, {$inc: {rating: 1}})
+            }
         }
     } else {
         let path = process.cwd()+'/public'+url
@@ -75,7 +80,7 @@ function buildWish(wish) {
         <b>${wish.text}</b>
         <div class="left">
             <p>${formatDate(wish.date)}</p>
-            <a href=""><i class="fa fa-thumbs-up"></i> ${wish.rating}</a>
+            <a id="w${wish._id}" href=""><i class="fa fa-thumbs-up"></i> <span>${wish.rating}</span></a>
         </div>
     </li>`
 }

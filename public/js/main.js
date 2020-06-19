@@ -2,6 +2,19 @@ const toggleModal = makeModal(addWishModal)
 addWishBtn.onclick = toggleModal
 sendWishBtn.onclick = handleWish
 
+wishList.onclick = e => {
+    const link = e.path.find(el => el.tagName == "A")
+    if (link) {
+        fetch('api/like', {
+            method: "POST",
+            body: link.id.slice(1)
+        })
+
+        link.lastElementChild.innerText = +link.lastElementChild.innerText + 1
+        e.preventDefault()
+    }
+}
+
 function handleWish() {
     const wish = wishArea.value.trim()
     if (wish) {
@@ -19,7 +32,7 @@ function buildWish(wish) {
         <b>${wish.text}</b>
         <div class="left">
             <p>${formatDate(new Date(wish.date))}</p>
-            <a href=""><i class="fa fa-thumbs-up"></i> ${wish.rating}</a>
+            <a id="w${wish._id}" href=""><i class="fa fa-thumbs-up"></i> <span>${wish.rating}</span></a>
         </div>
     </li>`
 }
