@@ -10,9 +10,22 @@
 </head>
 <body>
     <h1 class="title">Облако желаний</h1>
-    <button id="addWishBtn" class="btn-green">Загадать желание</button>
+    <div class="buttons">
+        <button id="addWishBtn" class="btn-green btn">Загадать желание</button>
+        <details id="sortBtn" class="btn-green btn" data-by="_id" data-asc="0">
+            <summary>Показать самые</summary>
+            <ul>
+                <li><a href="" data-sort="_id,1">Старые</a></li>
+                <li><a href="" data-sort="_id,0" class="active">Новые</a></li>
+                <li><a href="" data-sort="rating,0">Популярные</a></li>
+                <li><a href="" data-sort="rating,1">Незамеченные</a></li>
+            </ul>
+        </details>
+        <button class="btn-green btn" id="refreshBtn" title="Shift + Клик для автообновления (15 сек)">Обновить</button>
+    </div>
 
     <ul class="wishes" id="wishList"></ul>
+    <button class="btn-green" id="getMoreBtn">Ещё</button>
 
     <div class="my-modal" id="addWishModal">
         <h3 class="title">Загадать желание</h3><br>
