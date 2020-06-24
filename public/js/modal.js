@@ -10,6 +10,7 @@ function makeModal(el, options={}) {
     function toggle() {
         clearTimeout(delay)
         el.classList.toggle("hidden")
+        document.querySelector("main").classList.toggle("blured")
         if (options.autoHide && !el.classList.contains('hidden'))
             delay = setTimeout(toggle, options.autoHide * 1000)
     }

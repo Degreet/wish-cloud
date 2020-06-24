@@ -6,6 +6,9 @@ document.body.onscroll = e => {
 }
 getMoreBtn.onclick = getMoreWishes
 
+const id = String.fromCharCode(Math.floor(Math.random() * 26 + 65)) + Date.now()
+setInterval(() => fetch("/api/ping?id=" + id).then(res => res.text()).then(count => onlineSpan.innerText = count), 30000)
+
 let refreshInterval
 refreshBtn.onclick = e => {
     if (e.shiftKey) {
@@ -27,8 +30,9 @@ if (localStorage.refresh) {
     refreshBtn.classList.add("active")
 }
 
-document.querySelectorAll("details ul li a").forEach(a => a.onclick = handleSort)
-document.querySelectorAll("a").forEach(a => a.addEventListener('click', e => e.preventDefault()))
+sortBtn.querySelectorAll("a").forEach(a => a.onclick = handleSort)
+// document.querySelectorAll("a").forEach(a => a.addEventListener('click', e => e.preventDefault()))
+addEventListener("click", e => {if (e.path.some(el => el.tagName == "A")) e.preventDefault()})
 
 wishList.onclick = e => {
     const link = e.path.find(el => el.tagName == "A")
@@ -82,7 +86,7 @@ function handleSort(e) {
 
 function refresh() {
     const {by, asc} = sortBtn.dataset
-    fetch(`api/wishes?by=${by}&asc=${asc}`).then(res => res.json())
+    fetch(`api/wishes?by=${by}&asc=${asc}&limit=${wishList.children.length}`).then(res => res.json())
         .then(wishes => wishList.innerHTML = wishes.map(buildWish).join(''))
 }
 

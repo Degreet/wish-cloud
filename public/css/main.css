@@ -9,11 +9,17 @@
 body {
     text-align: center;
     background: url("../img/bg.jpg") fixed no-repeat;
-    background-size: 100%;
+    background-size: 102%;
+    min-height: 100vh;
 }
 
 .wrapper {
-    background: #0003;
+    background: #0003 fixed;
+    min-height: 100vh;
+}
+
+.wrapper.blured {
+    filter: blur(3px);
 }
 
 h1.title {
@@ -24,6 +30,14 @@ h1.title {
     text-shadow: 0 0 5px #CB7043,
                  0 0 5px #CB7043,
                  0 0 5px #CB7043;
+}
+
+.online-span {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    opacity: .5;
+    color: #ffffff;
 }
 
 h3.title {
@@ -71,11 +85,10 @@ h3.title {
     border: 1px solid transparent;
     border-radius: .25rem;
     color: #CB7043;
-    background-color: #FFFDE5dd;
-    box-shadow: 0 0 5px 3px #CB7043;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    animation: wish-animate 2s infinite alternate;
 }
 
 .wish b {
@@ -140,10 +153,10 @@ details ul li a:hover, details ul li a.active {
     -ms-user-select: none;
     user-select: none;
     border: 1px solid transparent;
-        border-top-color: transparent;
-        border-right-color: transparent;
-        border-bottom-color: transparent;
-        border-left-color: transparent;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
     padding: .375rem .75rem;
     font-size: 1rem;
     line-height: 1.5;
@@ -152,6 +165,7 @@ details ul li a:hover, details ul li a.active {
     background-color: transparent;
     border-color: #CB7043;
     cursor: pointer;
+    height: 38px;
 }
 
 .btn-green:hover, .btn-green.active {
@@ -229,6 +243,18 @@ textarea:focus {
     border-color: #80bdff;
     outline: 0;
     box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
+}
+
+@keyframes wish-animate {
+    from {
+        box-shadow: 0 0 5px 3px #e4804e97;
+        background-color: #FFFDE5dd;
+    }
+
+    to {
+        box-shadow: 0 0 5px 3px #e4804e;
+        background-color: #FFFDE5ee;
+    }
 }
 
 @media screen and (max-width: 632px) {

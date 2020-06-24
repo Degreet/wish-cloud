@@ -1,17 +1,20 @@
 const fs = require('fs'), fsp = fs.promises
 const {ObjectId} = require("mongodb")
+
 module.exports = async function requestHandler(req, res) {
     let { url } = req
     if (url.startsWith('/api/')) {
         res.setHeader('Content-Type', 'application/json')
         url = url.slice(5)
-        if (url == 'addwish') {
-            const wishText = (await streamToString(req)).trim()
-            if (wishText) {
-                const wish = {text: wishText, date: new Date, rating: 0}
-                await wishes.insertOne(wish)
-                res.end(JSON.stringify(wish))
+
+        if (url.startsWith('ping?')) {
+            const id = url.match(/id=([^&$]*)/)
+            if (id) {
+                const user = global.count.find(user => user.id == id[1])
+                if (user) user.ts = Date.now()
+                else global.count.push({id: id[1].c(), ts: Date.now()})
             }
+            res.end(String(global.count.length))
         } else if (url == 'like') {
             const wishId = await streamToString(req)
             if (wishId) {
@@ -19,11 +22,19 @@ module.exports = async function requestHandler(req, res) {
             }
 
             res.end()
+        } else if (url == 'addwish') {
+            const wishText = (await streamToString(req)).trim()
+            if (wishText) {
+                const wish = {text: wishText, date: new Date, rating: 0}
+                await wishes.insertOne(wish)
+                res.end(JSON.stringify(wish))
+            }
         } else if (url.startsWith('wishes?')) {
             const by = url.match(/by=([^&$]*)/)[1]
             const asc = +url.match(/asc=([^&$]*)/)[1]
-            const offset = +url.match(/offset=([^&$]*)/)[1]
-            getDocs(wishes, 10, by, asc, offset).then(wishesData => res.end(JSON.stringify(wishesData)))
+            const offset = +(url.match(/offset=([^&$]*)/) || [0, 0])[1]
+            const limit = +(url.match(/limit=([^&$]*)/) || [0, 10])[1]
+            getDocs(wishes, limit, by, asc, offset).then(wishesData => res.end(JSON.stringify(wishesData)))
         }
     } else {
         let path = process.cwd()+'/public'+url.replace(/\/$/, '')

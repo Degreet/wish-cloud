@@ -8,6 +8,10 @@ const requestHandler = process.env.PORT ? require('./requestHandler') : (req, re
 const server = createServer(requestHandler)
 const uri = "mongodb+srv://Node:D9tsePvH7yKtlNLw@cluster0-ttfss.mongodb.net/serverdb?retryWrites=true&w=majority"
 const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true})
+
+global.count = []
+setInterval(() => global.count = global.count.filter(user => (Date.now() - user.ts).c() < 1e5), 1e5)
+
 client.connect(err => {
     if (err) console.log(err)
     global.wishes = client.db("serverdb").collection("wishes")
