@@ -5,6 +5,7 @@ document.body.onscroll = e => {
     if (document.documentElement.offsetHeight - innerHeight == scrollY) getMoreWishes()
 }
 getMoreBtn.onclick = getMoreWishes
+let key = ''
 
 const id = String.fromCharCode(Math.floor(Math.random() * 26 + 65)) + Date.now()
 setInterval(() => fetch("/api/ping?id=" + id).then(res => res.text()).then(count => onlineSpan.innerText = count), 30000)
@@ -31,11 +32,11 @@ if (localStorage.refresh) {
 }
 
 sortBtn.querySelectorAll("a").forEach(a => a.onclick = handleSort)
-// document.querySelectorAll("a").forEach(a => a.addEventListener('click', e => e.preventDefault()))
 addEventListener("click", e => {if (e.path.some(el => el.tagName == "A")) e.preventDefault()})
 
 wishList.onclick = e => {
     const link = e.path.find(el => el.tagName == "A")
+    const wish = e.path.find(el => el.tagName == "LI")
     if (link) {
         fetch('api/like', {
             method: "POST",
@@ -43,6 +44,13 @@ wishList.onclick = e => {
         })
 
         link.lastElementChild.innerText = +link.lastElementChild.innerText + 1
+    } else if (e.ctrlKey && e.shiftKey && wish) {
+        if (!key) key = prompt("Введите пароль:", "")
+        const id = wish.querySelector("a").id.slice(1)
+        fetch("api/remove", {
+            method: "POST",
+            body: JSON.stringify({id, key})
+        })
     }
 }
 

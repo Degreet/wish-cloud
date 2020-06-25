@@ -35,6 +35,10 @@ module.exports = async function requestHandler(req, res) {
             const offset = +(url.match(/offset=([^&$]*)/) || [0, 0])[1]
             const limit = +(url.match(/limit=([^&$]*)/) || [0, 10])[1]
             getDocs(wishes, limit, by, asc, offset).then(wishesData => res.end(JSON.stringify(wishesData)))
+        } else if (url == 'remove') {
+            const {key, id} = JSON.parse((await streamToString(req)).trim())
+            if (key == process.env.KEY) wishes.deleteOne({_id: ObjectId(id)})
+            res.end()
         }
     } else {
         let path = process.cwd()+'/public'+url.replace(/\/$/, '')

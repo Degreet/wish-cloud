@@ -10,7 +10,7 @@ const uri = "mongodb+srv://Node:D9tsePvH7yKtlNLw@cluster0-ttfss.mongodb.net/serv
 const client = new MongoClient(uri, {useNewUrlParser: true, useUnifiedTopology: true})
 
 global.count = []
-setInterval(() => global.count = global.count.filter(user => (Date.now() - user.ts).c() < 1e5), 1e5)
+setInterval(() => global.count = global.count.filter(user => (Date.now() - user.ts) < 1e5), 1e5)
 
 client.connect(err => {
     if (err) console.log(err)
