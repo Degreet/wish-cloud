@@ -54,6 +54,14 @@ wishList.onclick = e => {
     }
 }
 
+searchInput.onkeydown = e => {
+    if (e.key == "Enter") {
+        const {by, asc} = sortBtn.dataset
+        fetch(`api/wishes?by=${by}&asc=${asc}&limit=200&search=${searchInput.value}`).then(res => res.json())
+            .then(wishes => wishList.innerHTML = wishes.map(buildWish).join(''))
+    }
+}
+
 function handleWish() {
     const wish = wishArea.value.trim()
     if (wish) {
@@ -94,7 +102,7 @@ function handleSort(e) {
 
 function refresh() {
     const {by, asc} = sortBtn.dataset
-    fetch(`api/wishes?by=${by}&asc=${asc}&limit=${wishList.children.length}`).then(res => res.json())
+    fetch(`api/wishes?by=${by}&asc=${asc}&limit=${Math.max(wishList.children.length, 10)}`).then(res => res.json())
         .then(wishes => wishList.innerHTML = wishes.map(buildWish).join(''))
 }
 

@@ -12,7 +12,7 @@ module.exports = async function requestHandler(req, res) {
             if (id) {
                 const user = global.count.find(user => user.id == id[1])
                 if (user) user.ts = Date.now()
-                else global.count.push({id: id[1].c(), ts: Date.now()})
+                else global.count.push({id: id[1], ts: Date.now()})
             }
             res.end(String(global.count.length))
         } else if (url == 'like') {
@@ -34,7 +34,9 @@ module.exports = async function requestHandler(req, res) {
             const asc = +url.match(/asc=([^&$]*)/)[1]
             const offset = +(url.match(/offset=([^&$]*)/) || [0, 0])[1]
             const limit = +(url.match(/limit=([^&$]*)/) || [0, 10])[1]
-            getDocs(wishes, limit, by, asc, offset).then(wishesData => res.end(JSON.stringify(wishesData)))
+            const search = (url.match(/search=([^&$]*)/) || '')[1]
+            getDocs(wishes, limit, by, asc, offset, search && decodeURI(search))
+                .then(wishesData => res.end(JSON.stringify(wishesData)))
         } else if (url == 'remove') {
             const {key, id} = JSON.parse((await streamToString(req)).trim())
             if (key == process.env.KEY) wishes.deleteOne({_id: ObjectId(id)})
@@ -97,6 +99,7 @@ function formatDate(date) {
         (date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear() % 100}`
 }
 
-function getDocs(collection, num, by, asc, offset=0) {
-    return collection.find().sort({[by]:asc?1:-1}).skip(offset).limit(num).toArray()
+function getDocs(collection, num, by, asc, offset=0, search) {
+    try {if (search) search = new RegExp(search, 'i')} catch {}
+    return collection.find(search ? {text: search} : {}).sort({[by]:asc?1:-1}).skip(offset).limit(num).toArray()
 }
